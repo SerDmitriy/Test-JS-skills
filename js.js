@@ -10,7 +10,7 @@ let mainDb = [
         answer2: "Nothing else Needed",
         answer3: "Not a Number",
         answer4: "Negotiate a Number",
-        rightAnswer: 3,
+        rightAnswer: "Not a Number",
         showed: false
     },
     {
@@ -20,7 +20,7 @@ let mainDb = [
         answer2: "By assigning array length to 0: array.length = 0;",
         answer3: "By popping the elements of the array: while(array.length > 0) { array.pop(); }",
         answer4: "By using the splice array function: array.splice(0, array.length);",
-        rightAnswer: 1,
+        rightAnswer: "By assigning an empty array: array = array.clear();",
         showed: false
     },
     {
@@ -30,7 +30,7 @@ let mainDb = [
         answer2: "By using an array function: var someArray = function Array(‘value1’, ‘value2’,…, ‘valueN’);",
         answer3: "By using an array constructor: var someArray = new Array(‘value1’, ‘value2’,…, ‘valueN’); ",
         answer4: "By using an array literal: var someArray = [value1, value2,…., valueN];",
-        rightAnswer: 2,
+        rightAnswer: "By using an array function: var someArray = function Array(‘value1’, ‘value2’,…, ‘valueN’);",
         showed: false
     },
     {
@@ -40,7 +40,7 @@ let mainDb = [
         answer2: "Number",
         answer3: "Function",
         answer4: "Object",
-        rightAnswer: 4,
+        rightAnswer: "Object",
         showed: false
     }
 ];
@@ -71,32 +71,65 @@ function nextQuestion() {
 function initialize() {
     counterQuestions = 0;
     counterCorrectQuestions = 0;
+
+    for (let i = 0; i < mainDb.length; i++) {  // random sort question objects
+        mainDb.sort((a, b) => Math.round(Math.random()) - 0.5);
+    }
+
+    for (let i = 0; i < mainDb.length; i++) {  // random sort answers in objects
+        let newQuestionObj = [];                //need to rewrite
+        for (let j = 1; j <= 4; j++) {
+            newQuestionObj.push(mainDb[i]["answer" + j]);
+        }
+
+        //console.dir(newQuestionObj);
+        for (let j = 1; j <= 10; j++) {
+            newQuestionObj.sort(() => Math.round(Math.random()) - 0.5);
+        }
+        //console.dir(newQuestionObj);
+
+        //console.dir(mainDb[i]);
+        for (let j = 0; j <= 3; j++) {
+            mainDb[i]["answer" + 0 + (j + 1)] = newQuestionObj[j];
+        }
+        //console.dir(mainDb[i]);
+    }
+
     display();
 }
 
 function checkRight() {
-    /*let checkedAnswer = 0; //for understanding way of refactiring
-    if (firstOptionRadio.checked == true) { checkedAnswer = 1; }
-    if (secondOptionRadio.checked == true) { checkedAnswer = 2; }
-    if (thirdOptionRadio.checked == true) { checkedAnswer = 3; }
-    if (fourthOptionRadio.checked == true) { checkedAnswer = 4; } 
-    if (mainDb[counterQuestions].rightAnswer == checkedAnswer) {counterCorrectQuestions++}
-    */
-    if (answerCheckboxes[mainDb[counterQuestions].rightAnswer - 1].checked == true) {
-        counterCorrectQuestions++
-    }  // i'll split it, if it would be needed
+    let rightCheckbox;
+    let flagChosen = false;
+    for (let i = 0; i < answerCheckboxes.length; i++) {
+        if (answerCheckboxes[i].checked == true) {
+            rightCheckbox = answerCheckboxes[i];
+            flagChosen = true;
+        }
+    }
+    if (flagChosen) {
+        if (mainDb[counterQuestions].rightAnswer == rightCheckbox.nextElementSibling.innerText) {
+            counterCorrectQuestions++
+        }  //works better then next method
+    }
 
+    //rightCheckbox = Array.prototype.filter.call(answerCheckboxes, item => item.checked == true );
+    // don`t work, when user didn`t choose answer option
+
+    /*if (rightCheckbox != undefined && mainDb[counterQuestions].rightAnswer == rightCheckbox[0].nextElementSibling.innerText) {
+        counterCorrectQuestions++
+    }*/   // there should work rule of short hand operations in "if" comparemant
 }
 
 function display() {
     answerCheckboxes.forEach((i) => { i.checked = false });
 
-    questionText.innerText = mainDb[counterQuestions].number + ". " + mainDb[counterQuestions].question;
+    questionText.innerText = `${counterQuestions + 1}. ${mainDb[counterQuestions].question}`;
 
-    firstOptionText.innerText = `${mainDb[counterQuestions].answer1}`;
-    secondOptionText.innerText = `${mainDb[counterQuestions].answer2}`;
-    thirdOptionText.innerText = `${mainDb[counterQuestions].answer3}`;
-    fourthOptionText.innerText = `${mainDb[counterQuestions].answer4}`;
+    firstOptionText.innerText = `${mainDb[counterQuestions].answer01}`;
+    secondOptionText.innerText = `${mainDb[counterQuestions].answer02}`;
+    thirdOptionText.innerText = `${mainDb[counterQuestions].answer03}`;
+    fourthOptionText.innerText = `${mainDb[counterQuestions].answer04}`;
 
     progressValue.value = counterQuestions;
 }
