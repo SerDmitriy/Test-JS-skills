@@ -1,0 +1,139 @@
+/*@import "normalize.scss";*/
+* {
+    margin: 0;
+    padding: 0;
+}
+//=== Mixins ===
+@mixin font-lato {
+    font-family: "Lato", sans-serif;
+}
+
+@mixin font-montserrat {
+    font-family: "Montserrat", sans-serif;
+}
+//=== / Mixins ===
+
+// === Variables ===
+$color-white: #ffffff;
+// === / Variables ===
+
+// === Common ===
+* {
+    box-sizing: border-box;
+}
+
+body {
+    @include font-lato;
+    margin: 0 auto;
+    width: 1180px;
+    color: #a05050;
+    background-color:  rgba(139, 253, 229, 0.2);
+
+}
+
+@mixin start-button{
+    @include font-montserrat;
+
+    font-size: 16px;
+    margin: 20px;
+    padding: 8px 10px;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-main {
+    @include start-button;
+    border: none;
+    background: linear-gradient(to right, #fe985b, #fe4fa7);
+    color: $color-white;
+}
+
+// === / Common ===
+
+//=== Header ===
+
+.section-header {
+    color: #2835f1;          
+    position: relative;
+    height: 70px; 
+    background-color:  rgba(139, 253, 229, 0.2);
+    text-align: center;
+    &__logo {
+        padding: 20px;
+    }
+
+}
+
+//=== /Header ===
+
+//=== Main ===
+
+.question-form  {
+    background: rgba(222, 253, 218, 0.3);
+    width: 1180px;
+    height: 250px;
+    padding-top: 10px;
+    padding-left: 40px;
+    padding-bottom: 120px;
+
+    &__question-text {
+        @include font-montserrat;
+        margin: 20px auto;
+        font-weight: bold;
+ 
+    }
+    &__answer-text {
+        @include font-montserrat;
+        margin-left: 20px;
+        line-height: 2em;
+    }
+}
+
+//=== /Main ===
+
+
+//=== Footer ===
+
+.section-footer {
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    &__logo {
+        text-align: center;
+        font-style: 24px;
+        line-height: 29px;
+        font-weight: bold;        
+        margin-bottom: 30px;
+    }
+    &__nav {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 75px;
+        padding: 0;
+        list-style: none;
+
+        li {
+            & + li {
+                margin-left: 60px;
+            }
+
+            a {
+                font-style: 14px;
+                line-height: 20px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #464646;
+                text-decoration: none;
+
+                &.active {
+                    color: #fe50a6;
+                }
+            }
+        }
+    }
+}
+
+
+//=== / Footer ===
