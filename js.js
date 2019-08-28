@@ -1,6 +1,7 @@
 "use strict";
 let counterQuestions = 0;
 let counterCorrectQuestions = 0;
+const answers = [];
 let mainDb = [{
         question: "What is the description of NaN? ",
         answers: [
@@ -39,81 +40,87 @@ let mainDb = [{
     }
 ];
 
-document.getElementById("button").onclick = nextQuestion;
-
 const mainForm = document.getElementById("main-form");
-const questionText = document.getElementById("question");
-const progressValue = document.getElementById("progress-value");
+const randomize = arr => arr.sort(() => .5 - Math.random());
 
-//const answerCheckboxes = document.getElementsByName("question-form__answer-checkbox");
-//const answersText = document.getElementsByClassName("question-form__answer-text");
-
-//window.onload = initialize;
-initialize()
+initialize();
 
 function nextQuestion() {
-    checkRight();
-    counterQuestions++;
-    // console.dir(counterCorrectQuestions + " right from " + counterQuestions + " questions.");
-    // if (counterQuestions == mainDb.length) {
-    //     alert(`Task finished, your score ${counterCorrectQuestions} from ${mainDb.length}`);
-    //     initialize();
-    // };
+  pushAnswer();
+  counterQuestions++;
+  if (counterQuestions >= mainDb.length) {
+    counterQuestions = 0;
+    showResult();
+    return
+  }
 
-    display();
+  display();
 }
 
-function randomize(arr) {
-    arr.sort(() => .5 - Math.random());
+function showResult(){
+  mainForm.innerHTML = ``;
+  mainDb.forEach( (item, index, arr) => {
+    createDiv(item.question);
+    item.answers.filter(item => item.truth).forEach( item => createDiv(`Right answer:${item.value}`));
+    createDiv(`Your answer:${answers[index]}`);
+  });
 }
+
+function createDiv(text) {
+  let div = document.createElement('div');
+  div.innerText = `${text}`;
+  mainForm.appendChild(div);
+};
 
 function initialize() {
-    console
-    counterQuestions = 0;
-    randomize(mainDb).forEach(item => randomize(item.answers));
-    display();
+  counterQuestions = 0;
+  randomize(mainDb).forEach(item => randomize(item.answers));
+  display();
 }
 
-function checkRight() {
-    //let result = document.querySelector("input:checked");
-    //console.dir(result);
+function pushAnswer() {
+  let result = document.querySelector("input:checked");
+  if (result == undefined) {answers.push(`No answer`)}
+  else {answers.push(result.value)}
 }
 
-function showHeader() {
-    let header = document.createElement('div');
-    header.innerText = `${counterQuestions + 1}. ${mainDb[counterQuestions].question}`;
-    mainForm.appendChild(header);
+function showQuestion() {
+  let question = document.createElement('div');
+  question.innerText = `${counterQuestions + 1}. ${mainDb[counterQuestions].question}`;
+  mainForm.appendChild(question);
 }
 
-function showAnswers() {
-    mainDb[counterQuestions].answers.forEach((item, index, array) => {
-        let rowAnswer = document.createElement('input');
-        rowAnswer.type = "radio";
-        rowAnswer.name = "answer-checkbox";
-        mainForm.appendChild(rowAnswer);
+function showAnswers() {                            //-----------------------//-------------------------//-------------------------//-------------------------
+  mainDb[counterQuestions].answers.forEach((item, index, array) => {
+    let rowAnswer = document.createElement('input');
+    rowAnswer.type = "radio";
+    rowAnswer.name = "answer-checkbox";
+    rowAnswer.value = `${item.value}`;
+    mainForm.appendChild(rowAnswer);
 
-        let spanAnswer = document.createElement('span');
-        spanAnswer.innerHTML = `${item.value}`;
-        mainForm.appendChild(spanAnswer);
+    let spanAnswer = document.createElement('span');
+    spanAnswer.innerHTML = `${item.value}`;
+    mainForm.appendChild(spanAnswer);
 
-        let br = document.createElement('br');
-        mainForm.appendChild(br);
-    });
+    let br = document.createElement('br');
+    mainForm.appendChild(br);
+  });
 }
 
 function showNextBtn() {
     let button = document.createElement('button');
     button.type = "button";
     button.id = 'button';
+    button.innerHTML = `Next question`;
     mainForm.appendChild(button);
 }
 
 
 function display() {
     mainForm.innerHTML = ``;
-    showHeader();
+    showQuestion();
     showAnswers();
     showNextBtn();
-    //answerCheckboxes.forEach((i) => { i.checked = false });
+    document.getElementById("button").onclick = nextQuestion;
 
 }
