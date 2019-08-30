@@ -44,9 +44,15 @@
       <span class="span-error" hidden>Some text</span>
       <input name="lastName" onkeyup="handleChange(this)" type="text" placeholder="Last name">
       <span class="span-error" hidden="true">Some text</span>
-      <input name="email" onkeyup="handleChange(this)" type="text" placeholder="Email">
+      <input
+        name="email"
+        onchange="handleChange(this)"
+        onkeyup="handleChange(this)"
+        type="text"
+        placeholder="Email"
+      >
       <span class="span-error" hidden="true">Some text</span>
-      <input name="date" onkeyup="handleChange(this)" type="date" placeholder="Date">
+      <input name="date" onchange="handleChange(this)" onkeyup="handleChange(this)" type="date" placeholder="Date">
       <span class="span-error" hidden="true">Some text</span>
       <input name="imgFile" onkeyup="handleChange(this)" type="file" placeholder="img-file">      
       <span class="span-error" hidden="true">Some text</span>
