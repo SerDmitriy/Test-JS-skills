@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,28 +13,54 @@
       width: 300px;
       height: 800px;
     }
+
     .error {
       border: 1px solid red;
     }
+
     input {
       margin: 15px auto 0 auto;
       width: 250px;
       outline: none;
     }
+
     .span-error {
       color: red;
       font-size: 10px;
       line-height: 1.2em;
     }
+
     .header {
       text-align: center;
     }
+
     .submit {
       display: block;
       margin: 0 auto;
     }
+
+    .image-column {
+      background: #cecece;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    #img-file {
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: 50% 50% no-repeat;
+      background-size: cover;
+    }
+    #output {
+      width: 150px;
+      height: 100px;
+
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <form id="main">
@@ -41,29 +68,34 @@
         Registration
       </div>
       <input name="firstName" onkeyup="handleChange(this)" type="text" placeholder="First name">
-      <span class="span-error" hidden>Some text</span>
+      <span class="span-error" hidden>
+        Some text
+      </span>
       <input name="lastName" onkeyup="handleChange(this)" type="text" placeholder="Last name">
       <span class="span-error" hidden="true">Some text</span>
-      <input
-        name="email"
-        onchange="handleChange(this)"
-        onkeyup="handleChange(this)"
-        type="text"
-        placeholder="Email"
-      >
+      <input name="email" onchange="handleChange(this)" onkeyup="handleChange(this)" type="text" placeholder="Email">
       <span class="span-error" hidden="true">Some text</span>
       <input name="date" onchange="handleChange(this)" onkeyup="handleChange(this)" type="date" placeholder="Date">
       <span class="span-error" hidden="true">Some text</span>
-      <input name="imgFile" onkeyup="handleChange(this)" type="file" placeholder="img-file">      
+      <input
+        name="imgFile"
+        onchange="handleChangeFile(this.files)"
+        onkeyup="handleChangeFile(this.files)"
+        type="file"
+        placeholder="img-file"
+        accept='image/*'
+      >
+      <img id='output'><img >
       <span class="span-error" hidden="true">Some text</span>
       <input name="password" onkeyup="handleChange(this)" type="password" placeholder="Password">
       <span class="span-error" hidden="true">Some text</span>
       <input name="confirmPassword" onkeyup="handleChange(this)" type="password" placeholder="Confirm password">
-      <span class="span-error" hidden="true">Some text</span><br>
+      <span class="span-error" hidden="true">Some text</span><br><br>
       <button type="submit" class='submit'>Register me</button>
-          
     </form>
   </div>
   <script src="./registration.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="wrapper">
+    <form action="">
+      <div>Input invest sum </div>
+      <input type="text" placeholder="100">
+      <div>How many month? </div>
+      <select>
+        <option value="1">1</option>
+        <option value="3">3</option>
+        <option selected value="6">6</option>
+        <option value="12">12</option>
+      </select>
+      <div>Choose deposit currency:</div>
+      <input type="radio" checked name="currency" value="UAH"><span>UAH. </span>
+      <input type="radio" name="currency" value="USD"><span>USD. </span>
+      <input type="radio" name="currency" value="EUR"><span>EUR. </span>
+      <br>
+      <input type="checkbox" name="Accumulative"><span>Accumulative?</span>
+      <br>
+      <button type="button" id="btn" preventDefault onclick="calculate(this);">Calculate</button>
+    </form>
+  </div>
+
+
+  <script>
+    const interest = [
+      {
+        currency: "UAH",
+        proc: [8, 10, 12, 15]
+      },
+      {
+        currency: "USD",
+        proc: [1.5, 2, 2.5, 3]
+      },
+      {
+        currency: "EUR",
+        proc: [1, 1.5, 2, 2.5]
+      }
+    ]
+    const calculate = (item) => {
+      const form = item.form;
+      let sum = Number(form[0].value) || 0;
+      let index = Number(form[1].selectedIndex)
+      let mounth = Number(form[1][index].text)
+      let currency;
+      let accumulative = form[5].checked;
+      for (let i = 2; i <= 4; i++) {
+        if (form[i].checked) { currency = form[i].value }
+      }
+      let procentage = interest.filter(item => item.currency === currency)[0].proc[index]
+      let resultProfit = sum * procentage / 100 * mounth / 12;
+      if (accumulative) {
+        resultProfit = sum
+        for (let i = 1; i <= mounth; i++) {
+          resultProfit += (resultProfit * procentage / 100 )/ 12
+          console.log(resultProfit)
+        }
+        resultProfit -= sum
+
+      }
+      resultProfit = Number(resultProfit.toFixed(3))
+      console.log('sum', sum)
+      console.log('mounth', mounth)
+      console.log('currency', currency)
+      console.log('accumulative: ', accumulative)
+      console.log('procentage = ', procentage)
+      console.log('resultProfit = ', resultProfit)
+      alert(`Your profit = ${resultProfit} ${currency}`)
+
+    }
+    const btn = document.getElementById('btn')
+
+  </script>
+</body>
+
+</html>
