@@ -93,12 +93,6 @@ function checkRight() {
         }  //works better then next method
     }
 
-    //rightCheckbox = Array.prototype.filter.call(answerCheckboxes, item => item.checked == true );
-    // don`t work, when user didn`t choose answer option
-
-    /*if (rightCheckbox != undefined && mainDb[counterQuestions].rightAnswer == rightCheckbox[0].nextElementSibling.innerText) {
-        counterCorrectQuestions++
-    }*/   // there should work rule of short hand operations in "if" comparemant
 }
 
 function display() {
