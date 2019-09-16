@@ -1,108 +1,126 @@
-
 "use strict";
 let counterQuestions = 0;
 let counterCorrectQuestions = 0;
-let mainDb = [
-    {
-        question: "What is the description of NaN? ",
-        answers: ["Not a Null",
-            "Nothing else Needed",
-            "Not a Number",
-            "Negotiate a Number"
-        ],
-        rightAnswer: "Not a Number",
-    },
-    {
-        question: "Find incorrect option to empty an array in JavaScript?",
-        answers: ["By assigning an empty array: array = array.clear();",
-            "By assigning array length to 0: array.length = 0;",
-            "By popping the elements of the array: while(array.length > 0) { array.pop(); }",
-            "By using the splice array function: array.splice(0, array.length);"
-        ],
-        rightAnswer: "By assigning an empty array: array = array.clear();",
-    },
-    {
-        question: "What way is incorrect to create an array in JS?",
-        answers: ["By creating instance of an array: var someArray = new Array(); ",
-            "By using an array function: var someArray = function Array(‘value1’, ‘value2’,…, ‘valueN’);",
-            "By using an array constructor: var someArray = new Array(‘value1’, ‘value2’,…, ‘valueN’); ",
-            "By using an array literal: var someArray = [value1, value2,…., valueN];"
-        ],
-        rightAnswer: "By using an array function: var someArray = function Array(‘value1’, ‘value2’,…, ‘valueN’);",
-    },
-    {
-        question: "What is a result of using typeof null?",
-        answers: ["Null",
-            "Number",
-            "Function",
-            "Object"
-        ],
-        rightAnswer: "Object",
-    }
+const answers = [];
+let mainDb = [{
+		question: "What is the description of NaN? ",
+		answers: [
+			{ value: "Not a Null", truth: false },
+			{ value: "Nothing else Needed", truth: false },
+			{ value: "Not a Number", truth: true },
+			{ value: "Negotiate a Number", truth: false }
+		]
+	},
+	{
+		question: "Find incorrect option to empty an array in JavaScript?",
+		answers: [
+			{ value: "By assigning an empty array: array = array.clear();", truth: true },
+			{ value: "By assigning array length to 0: array.length = 0;", truth: false },
+			{ value: "By popping the elements of the array: while(array.length > 0) { array.pop(); }", truth: false },
+			{ value: "By using the splice array function: array.splice(0, array.length);", truth: false }
+		]
+	},
+	{
+		question: "What way is incorrect to create an array in JS?",
+		answers: [
+			{ value: "By creating instance of an array: var someArray = new Array();", truth: false },
+			{ value: "By using an array function: var someArray = function Array(‘value1’, ‘value2’,…, ‘valueN’);", truth: true },
+			{ value: "By using an array constructor: var someArray = new Array(‘value1’, ‘value2’,…, ‘valueN’);", truth: false },
+			{ value: "By using an array literal: var someArray = [value1, value2,…., valueN];", truth: false }
+		]
+	},
+	{
+		question: "What is a result of using typeof null?",
+		answers: [
+			{ value: "Null", truth: false },
+			{ value: "Number", truth: false },
+			{ value: "Function", truth: false },
+			{ value: "Object", truth: true }
+		]
+	}
 ];
 
-document.getElementById("submit-btn").onclick = nextQuestion;
+const mainForm = document.getElementById("main-form");
+const randomize = arr => arr.sort(() => .5 - Math.random());
 
-const questionText = document.getElementById("question");
-const progressValue = document.getElementById("progress-value");
-
-const answerCheckboxes = document.getElementsByName("question-form__answer-checkbox");
-const answersText = document.getElementsByClassName("question-form__answer-text");
-
-window.onload = initialize;
+initialize();
 
 function nextQuestion() {
-    checkRight();
-    counterQuestions++;
-    console.dir(counterCorrectQuestions + " right from " + counterQuestions + " questions.");
-    if (counterQuestions == mainDb.length) {
-        alert(`Task finished, your score ${counterCorrectQuestions} from ${mainDb.length}`);
-        initialize();
-    };
-
-    display();
+	pushAnswer();
+	counterQuestions++;
+	if (counterQuestions >= mainDb.length) {
+		counterQuestions = 0;
+		showResult();
+		return
+	}
+	display();
 }
+
+function showResult() {
+	mainForm.innerHTML = ``;
+	mainDb.forEach((item, index, arr) => {
+		createDiv(item.question, "question");
+		item.answers.filter(item => item.truth).forEach(item => createDiv(`Right answer:${item.value}`, 'right-answer'));
+		createDiv(`Your answer:${answers[index]}`, 'wrong-answer');
+	});
+}
+
+function createDiv(text, className) {
+	let div = document.createElement('div');
+	div.innerText = `${text}`;
+	div.className = className;
+	mainForm.appendChild(div);
+};
 
 function initialize() {
-    counterQuestions = 0;
-    counterCorrectQuestions = 0;
-
-    for (let i = 0; i < mainDb.length; i++) {  // random sort question objects
-        mainDb.sort((a, b) => 0.5 - Math.random());
-    }
-
-    for (let i = 0; i < mainDb.length; i++) {  // random sort answers in objects
-        mainDb[i].answers.sort(() => 0.5 - Math.random());
-    }
-
-    display();
+	counterQuestions = 0;
+	randomize(mainDb).forEach(item => randomize(item.answers));
+	display();
 }
 
-function checkRight() {
-    let rightCheckbox;
-    let flagChosen = false;
-    for (let i = 0; i < answerCheckboxes.length; i++) {
-        if (answerCheckboxes[i].checked == true) {
-            rightCheckbox = answerCheckboxes[i];
-            flagChosen = true;
-        }
-    }
-    if (flagChosen) {
-        if (mainDb[counterQuestions].rightAnswer == rightCheckbox.nextElementSibling.innerText) {
-            counterCorrectQuestions++
-        }  //works better then next method
-    }
+function pushAnswer() {
+	let result = document.querySelector("input:checked");
+	if (result == undefined) { answers.push(`No answer`) } else { answers.push(result.value) }
+}
 
+function showQuestion() {
+	let question = document.createElement('div');
+	question.innerText = `${counterQuestions + 1}. ${mainDb[counterQuestions].question}`;
+	mainForm.appendChild(question);
+}
+
+<<<<<<< HEAD
+=======
+function showAnswers() {
+	mainDb[counterQuestions].answers.forEach((item, index, array) => {
+		let rowAnswer = document.createElement('input');
+		rowAnswer.type = "radio";
+		rowAnswer.name = "answer-checkbox";
+		rowAnswer.value = `${item.value}`;
+		mainForm.appendChild(rowAnswer);
+
+		let spanAnswer = document.createElement('span');
+		spanAnswer.innerHTML = `${item.value}`;
+		mainForm.appendChild(spanAnswer);
+
+		let br = document.createElement('br');
+		mainForm.appendChild(br);
+	});
+}
+
+function showNextBtn() {
+	let button = document.createElement('button');
+	button.type = "button";
+	button.id = 'button';
+	button.innerHTML = `Next question`;
+	mainForm.appendChild(button);
+>>>>>>> d089554b4695463cdf651601925f6d4b5e60bf9a
 }
 
 function display() {
-    answerCheckboxes.forEach((i) => { i.checked = false });
-
-    questionText.innerText = `${counterQuestions + 1}. ${mainDb[counterQuestions].question}`;
-
-    for (let i = 0; i < answersText.length; i++) {
-        answersText[i].innerText = `${mainDb[counterQuestions].answers[i]}`;
-    }
-
-    progressValue.value = counterQuestions;
+	mainForm.innerHTML = ``;
+	showQuestion();
+	showAnswers();
+	showNextBtn();
+	document.getElementById("button").onclick = nextQuestion;
 }
